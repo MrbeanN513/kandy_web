@@ -1,24 +1,7 @@
-// import 'dart:async';
-// import 'dart:html';
-
-import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:firebase_core/firebase_core.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kandy/util/appbar.dart';
-import 'package:kandy/util/button/button_dpad.dart';
-
-import 'package:kandy/util/player/internal_videoplayer.dart';
-import 'package:optimized_cached_image/image_cache_manager.dart';
-import 'package:optimized_cached_image/widgets.dart';
-import 'package:optimized_cached_image/optimized_cached_image.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:wakelock/wakelock.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+part of kandy;
 
 class FirestoreExampleApp extends StatelessWidget {
+  const FirestoreExampleApp({Key? key}) : super(key: key);
   MaterialApp withMaterialApp(Widget body) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -75,67 +58,112 @@ class _FilmListState extends State<FilmList> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: aioAppBar(
-        handlehide,
-        handleuser,
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollcontroller2,
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Visibility(visible: _barhide ? false : true, child: sidebar()),
-            SizedBox(
-              width: _barhide
-                  ? MediaQuery.of(context).size.width
-                  : MediaQuery.of(context).size.width - 56,
-              height: MediaQuery.of(context).size.height,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: query.snapshots(),
-                builder: (context, stream) {
-                  if (stream.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: SpinKitCircle(
-                        color: Color(0xffFF0000),
-                        size: 50.0,
-                      ),
-                    );
-                  }
+    return ConnectivityBuilder(
+      builder: (context, isConnected, status) => Stack(
+        children: [
+          Scaffold(
+            backgroundColor: Colors.black,
+            appBar: aioAppBar(
+              handlehide,
+              handleuser,
+            ),
+            body: SingleChildScrollView(
+              controller: _scrollcontroller2,
+              scrollDirection: Axis.horizontal,
+              child: ConnectivityBuilder(
+                builder: (context, isConnected, status) => Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Visibility(
+                        visible: _barhide ? false : true, child: sidebar()),
+                    SizedBox(
+                      width: _barhide
+                          ? MediaQuery.of(context).size.width
+                          : MediaQuery.of(context).size.width - 56,
+                      height: MediaQuery.of(context).size.height,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: query.snapshots(),
+                        builder: (context, stream) {
+                          if (stream.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: SpinKitCircle(
+                                color: Color(0xffFF0000),
+                                size: 50.0,
+                              ),
+                            );
+                          }
 
-                  if (stream.hasError) {
-                    return Center(child: Text(stream.error.toString()));
-                  }
+                          if (stream.hasError) {
+                            return Center(child: Text(stream.error.toString()));
+                          }
 
-                  QuerySnapshot? querySnapshot = stream.data;
+                          QuerySnapshot? querySnapshot = stream.data;
 
-                  return Scaffold(
-                    backgroundColor: Colors.black,
-                    resizeToAvoidBottomInset: true,
-                    body: Scrollbar(
-                      isAlwaysShown: false,
-                      controller: _scrollcontroller,
-                      child: GridView.builder(
-                        controller: _scrollcontroller,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 250,
-                          childAspectRatio: 3 / 4,
-                          mainAxisSpacing: 5,
-                          crossAxisSpacing: 5,
-                        ),
-                        itemCount: querySnapshot!.size,
-                        itemBuilder: (context, index) =>
-                            Movie(querySnapshot.docs[index]),
+                          return Scaffold(
+                            backgroundColor: Colors.black,
+                            resizeToAvoidBottomInset: true,
+                            body: Scrollbar(
+                              isAlwaysShown: false,
+                              controller: _scrollcontroller,
+                              child: GridView.builder(
+                                controller: _scrollcontroller,
+                                gridDelegate:
+                                    SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 250,
+                                  childAspectRatio: 3 / 4,
+                                  mainAxisSpacing: 5,
+                                  crossAxisSpacing: 5,
+                                ),
+                                itemCount: querySnapshot!.size,
+                                itemBuilder: (context, index) =>
+                                    Movie(querySnapshot.docs[index]),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          Visibility(
+            visible: isConnected == false ? true : false,
+            child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                backgroundColor: Colors.black54,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height - 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Icon(
+                          Icons.cloud_off,
+                          size: 150,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Color(0xffFF0000),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Please Connect to Internet",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          ),
+        ],
       ),
     );
   }

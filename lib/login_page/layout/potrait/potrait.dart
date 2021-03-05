@@ -1,11 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kandy/login_page/util/authentication_service.dart';
-import 'package:kandy/login_page/util/screensize.dart';
-import 'package:provider/provider.dart';
-
-final FirebaseAuth auth = FirebaseAuth.instance;
+part of kandy;
 
 class MypotraitHomePage extends StatefulWidget {
   MypotraitHomePage({
@@ -42,47 +35,76 @@ class _MypotraitHomePageState extends State<MypotraitHomePage> {
   @override
   Widget build(BuildContext context) {
     ScreenScaler scaler = ScreenScaler()..init(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.black,
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/bg.jpeg"), fit: BoxFit.cover)),
-        child: Stack(
-          children: [
-            Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: scaler.getHeight(5),
-                  color: Colors.black.withAlpha(225),
-                  child: ListTile(
-                    trailing: Text("Need Help?",
-                        style: TextStyle(color: Colors.white, fontSize: 13)),
-                    title: Text(
-                        "© Copyright 2021 - unlimited \nMade by Goutam & Tapos",
-                        style: TextStyle(color: Colors.white, fontSize: 13)),
-                    // subtitle: Text("  Made by Goutam & Tapos",
-                    //     style: TextStyle(color: Colors.white, fontSize: 11)),
+    return ConnectivityBuilder(
+      builder: (context, isConnected, status) => Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.black,
+            body: Container(
+              constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/bg.jpeg"),
+                      fit: BoxFit.cover)),
+              child: Stack(
+                children: [
+                  buttomBar(
+                    scaler.getWidth(5),
                   ),
+                  Loginlayoutp(),
+                ],
+              ),
+            ),
+          ),
+          Visibility(
+            visible: isConnected == false ? true : false,
+            child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                backgroundColor: Colors.black54,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height - 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Icon(
+                          Icons.cloud_off,
+                          size: 150,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Color(0xffFF0000),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Please Connect to Internet",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ],
                 )),
-            Loginlayout(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class Loginlayout extends StatefulWidget {
-  Loginlayout({Key? key}) : super(key: key);
+class Loginlayoutp extends StatefulWidget {
+  Loginlayoutp({Key? key}) : super(key: key);
 
   @override
-  _LoginlayoutState createState() => _LoginlayoutState();
+  _LoginlayoutpState createState() => _LoginlayoutpState();
 }
 
-class _LoginlayoutState extends State<Loginlayout> {
+class _LoginlayoutpState extends State<Loginlayoutp> {
   bool _obscureText = true;
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;

@@ -1,16 +1,4 @@
-// ignore: import_of_legacy_library_into_null_safe
-import 'dart:async';
-import 'package:flutter/services.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:wakelock/wakelock.dart';
-import 'package:kandy/util/button/shortcut.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:video_player/video_player.dart';
-import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:intl/intl.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+part of kandy;
 
 class VideoApp extends StatefulWidget {
   final String? url;
@@ -149,6 +137,7 @@ class _VideoAppState extends State<VideoApp> {
     timer2 = new Timer(const Duration(seconds: 1), () {
       setState(() {
         isPressedForward = false;
+        isPressedBackward = false;
       });
     });
   }
@@ -172,36 +161,76 @@ class _VideoAppState extends State<VideoApp> {
   @override
   Widget build(BuildContext context) {
     if (_controller!.value.isInitialized) {
-      return ButtonShortcuts(
-        playbackSpeedInc: _handleSpeedFast,
-        playbackSpeedDec: _handleSpeedSlow,
-        spaceBarplayPause: _handleplaypauseTapAction,
-        skipForward_10: _handleforwardTapAction,
-        skipBackward_10: _handlebackwardTapAction,
-        pressedMute: _handleMute,
-        playPause: _handleplaypauseTapAction,
-        esc: _handlebackTapAction,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.black,
-          body: Stack(children: [
-            videoView(),
-            Visibility(
-              maintainInteractivity: true,
-              child: control(),
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              visible: isControlHidden ? false : true,
+      return ConnectivityBuilder(
+        builder: (context, isConnected, status) => Stack(
+          children: [
+            ButtonShortcuts(
+              playbackSpeedInc: _handleSpeedFast,
+              playbackSpeedDec: _handleSpeedSlow,
+              spaceBarplayPause: _handleplaypauseTapAction,
+              skipForward_10: _handleforwardTapAction,
+              skipBackward_10: _handlebackwardTapAction,
+              pressedMute: _handleMute,
+              playPause: _handleplaypauseTapAction,
+              esc: _handlebackTapAction,
+              child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.black,
+                body: Stack(children: [
+                  videoView(),
+                  Visibility(
+                    maintainInteractivity: true,
+                    child: control(),
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: isControlHidden ? false : true,
+                  ),
+                  normalplaybackfastSpeed(),
+                  normalplaybackSpeed(),
+                  hitSkipButton(),
+                  hitpauseButton(),
+                  hitforwardButton(),
+                  hitbackwardButton(),
+                  hitMuteButton(),
+                ]),
+              ),
             ),
-            normalplaybackfastSpeed(),
-            normalplaybackSpeed(),
-            hitSkipButton(),
-            hitpauseButton(),
-            hitforwardButton(),
-            hitbackwardButton(),
-            hitMuteButton(),
-          ]),
+            Visibility(
+              visible: isConnected == false ? true : false,
+              child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  backgroundColor: Colors.black54,
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height - 50,
+                        width: MediaQuery.of(context).size.width,
+                        child: Center(
+                          child: Icon(
+                            Icons.cloud_off,
+                            size: 150,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        color: Color(0xffFF0000),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Please Connect to Internet",
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          ],
         ),
       );
     } else if (_controller!.value.hasError) {

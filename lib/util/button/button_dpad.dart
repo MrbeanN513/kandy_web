@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+part of kandy;
+
 
 typedef VoidBuildContext = void Function(BuildContext context);
 typedef VoidTrapKeyEvent = void Function(

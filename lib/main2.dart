@@ -1,129 +1,87 @@
-// import 'package:video_player/video_player.dart';
+// // Copyright (c) 2021, the MarchDev Toolkit project authors. Please see the AUTHORS file
+// // for details. All rights reserved. Use of this source code is governed by a
+// // BSD-style license that can be found in the LICENSE file.
+
 // import 'package:flutter/material.dart';
 
-// void main() => runApp(VideoApp());
+// // ignore: import_of_legacy_library_into_null_safe
+// import 'package:cross_connectivity/cross_connectivity.dart';
 
-// class VideoApp extends StatefulWidget {
-//   @override
-//   _VideoAppState createState() => _VideoAppState();
+// void main() {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   runApp(MyApp());
 // }
 
-// class _VideoAppState extends State<VideoApp> {
-//   VideoPlayerController? _controller;
-//   Duration? videoLength;
-//   Duration? videoPosition;
-//   double volume = 0.5;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = VideoPlayerController.network(
-//         'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')
-//       ..addListener(() => setState(() {
-//             videoPosition = _controller!.value.position;
-//           }))
-//       ..initialize().then((_) {
-//         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-//         setState(() {
-//           videoLength = _controller!.value.duration;
-//         });
-//       });
-//   }
-
+// class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     return MaterialApp(
-//       title: 'Video Demo',
-//       home: Scaffold(
-//         body: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               if (_controller!.value.initialized) ...[
-//                 AspectRatio(
-//                   aspectRatio: _controller!.value.aspectRatio,
-//                   child: VideoPlayer(_controller!),
-//                 ),
-//                 VideoProgressIndicator(
-//                   _controller!,
-//                   allowScrubbing: true,
-//                   padding: EdgeInsets.all(10),
-//                 ),
-//                 Row(
-//                   children: <Widget>[
-//                     IconButton(
-//                       icon: Icon(
-//                         _controller!.value.isPlaying
-//                             ? Icons.pause
-//                             : Icons.play_arrow,
-//                       ),
-//                       onPressed: () => setState(
-//                         () {
-//                           _controller!.value.isPlaying
-//                               ? _controller!.pause()
-//                               : _controller!.play();
-//                         },
-//                       ),
-//                     ),
-//                     Text(
-//                         '${convertToMinutesSeconds(videoPosition!)} / ${convertToMinutesSeconds(videoLength!)}'),
-//                     SizedBox(width: 10),
-//                     Icon(animatedVolumeIcon(volume)),
-//                     Slider(
-//                         value: volume,
-//                         min: 0,
-//                         max: 1,
-//                         onChanged: (changedVolume) {
-//                           setState(() {
-//                             volume = changedVolume;
-//                             _controller!.setVolume(changedVolume);
-//                           });
-//                         }),
-//                     Spacer(),
-//                     IconButton(
-//                         icon: Icon(Icons.loop,
-//                             color: _controller!.value.isLooping
-//                                 ? Colors.green
-//                                 : Colors.black),
-//                         onPressed: () {
-//                           _controller!
-//                               .setLooping(!_controller!.value.isLooping);
-//                         })
-//                   ],
-//                 )
-//               ]
-//             ],
-//           ),
+//       title: 'Cross Connectivity Example',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: MyHomePage(),
+//     );
+//   }
+// }
+
+// class MyHomePage extends StatefulWidget {
+//   @override
+//   _MyHomePageState createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//    hello() {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         backgroundColor: Color(0xffFF0000),
+//         content: Text(
+//           'Failed to sign in with Email & Password',
+//           style: TextStyle(color: Colors.white),
 //         ),
 //       ),
 //     );
 //   }
 
 //   @override
-//   void dispose() {
-//     super.dispose();
-//     _controller!.dispose();
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Cross Connectivity Example'),
+//       ),
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           Center(
+//             //!
+//             child: ConnectivityBuilder(
+//               builder: (context, isConnected, status) => Row(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: <Widget>[
+                  
+                
+//                   Icon(
+//                     isConnected == true
+//                         ? Icons.signal_wifi_4_bar
+//                         : Icons.signal_wifi_off,
+//                     color: isConnected == true ? Colors.green : Colors.red,
+//                   ),
+//                   const SizedBox(width: 8),
+//                   Text(
+//                     'hello',
+//                     style: TextStyle(
+//                       color: status != ConnectivityStatus.none
+//                           ? Colors.green
+//                           : Colors.red,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
 //   }
-// }
-
-// String convertToMinutesSeconds(Duration duration) {
-//   final parsedMinutes = duration.inMinutes % 60;
-
-//   final minutes =
-//       parsedMinutes < 10 ? '0$parsedMinutes' : parsedMinutes.toString();
-
-//   final parsedSeconds = duration.inSeconds % 60;
-
-//   final seconds =
-//       parsedSeconds < 10 ? '0$parsedSeconds' : parsedSeconds.toString();
-
-//   return '$minutes:$seconds';
-// }
-
-// IconData animatedVolumeIcon(double volume) {
-//   if (volume == 0)
-//     return Icons.volume_mute;
-//   else if (volume < 0.5)
-//     return Icons.volume_down;
-//   else
-//     return Icons.volume_up;
 // }

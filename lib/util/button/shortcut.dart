@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+part of kandy;
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({

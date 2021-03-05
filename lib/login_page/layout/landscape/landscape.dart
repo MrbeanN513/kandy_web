@@ -1,9 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kandy/login_page/util/authentication_service.dart';
-import 'package:kandy/login_page/util/screensize.dart';
-import 'package:provider/provider.dart';
+part of kandy;
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -42,22 +37,63 @@ class _MylandscapeHomePageState extends State<MylandscapeHomePage> {
   @override
   Widget build(BuildContext context) {
     ScreenScaler scaler = ScreenScaler()..init(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.black,
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/bg.jpeg"), fit: BoxFit.cover)),
-        child: Stack(
-          children: [
-            buttomBar(
-              scaler.getWidth(5),
+    return ConnectivityBuilder(
+      builder: (context, isConnected, status) => Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.black,
+            body: Container(
+              constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/bg.jpeg"),
+                      fit: BoxFit.cover)),
+              child: Stack(
+                children: [
+                  buttomBar(
+                    scaler.getWidth(5),
+                  ),
+                  Loginlayout(),
+                ],
+              ),
             ),
-            Loginlayout(),
-          ],
-        ),
+          ),
+          Visibility(
+            visible: isConnected == false ? true : false,
+            child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                backgroundColor: Colors.black54,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height - 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Icon(
+                          Icons.cloud_off,
+                          size: 150,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Color(0xffFF0000),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Please Connect to Internet",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          ),
+        ],
       ),
     );
   }
@@ -74,7 +110,6 @@ Widget buttomBar(double? height) {
               style: TextStyle(color: Colors.white, fontSize: 13)),
           title: Text("© Copyright 2021 - unlimited \nMade by Goutam & Tapos",
               style: TextStyle(color: Colors.white, fontSize: 13)),
-          
         ),
       ));
 }
@@ -200,7 +235,8 @@ class _LoginlayoutState extends State<Loginlayout> {
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             labelText: 'User Name',
-                            suffixIcon: InkWell(focusColor: Color(0xff2e2d40),
+                            suffixIcon: InkWell(
+                              focusColor: Color(0xff2e2d40),
                               onTap: () {
                                 setState(() {
                                   _formKey.currentState!.reset();
@@ -256,7 +292,8 @@ class _LoginlayoutState extends State<Loginlayout> {
                             ),
                             prefixIcon:
                                 Icon(Icons.lock_open, color: Colors.grey),
-                            suffixIcon: InkWell(focusColor: Color(0xff2e2d40),
+                            suffixIcon: InkWell(
+                              focusColor: Color(0xff2e2d40),
                               onTap: () {
                                 setState(() {
                                   _obscureText = !_obscureText;

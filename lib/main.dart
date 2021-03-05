@@ -1,16 +1,46 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kandy/login_page/layout/landscape/landscape.dart';
-import 'package:kandy/login_page/layout/potrait/potrait.dart';
+library kandy;
+//!flutter import
+
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kandy/login_page/util/authentication_service.dart';
-import 'package:kandy/pages/BANGLA.dart';
-import 'package:kandy/util/splashscreen.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:optimized_cached_image/widgets.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:optimized_cached_image/optimized_cached_image.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:wakelock/wakelock.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_auth/firebase_auth.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:provider/provider.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:video_player/video_player.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:intl/intl.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'dart:core';
+import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'dart:math';
+
+//* my_import
+part 'package:kandy/login_page/layout/landscape/landscape.dart';
+part 'package:kandy/login_page/layout/potrait/potrait.dart';
+part 'package:kandy/login_page/util/authentication_service.dart';
+part 'package:kandy/login_page/util/screensize.dart';
+part 'package:kandy/pages/BANGLA.dart';
+part 'package:kandy/util/splashscreen.dart';
+part 'package:kandy/util/appbar.dart';
+part 'package:kandy/util/button/button_dpad.dart';
+part 'package:kandy/util/player/internal_videoplayer.dart';
+part 'package:kandy/util/button/shortcut.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +72,7 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider(
           create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
+              context.read<AuthenticationService>().authStateChanges, 
         )
       ],
       child: Shortcuts(
@@ -64,6 +94,7 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
+    // ignore: unnecessary_null_comparison
     if (firebaseUser != null) {
       return FirestoreExampleApp();
     }

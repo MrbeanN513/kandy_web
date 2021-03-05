@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:async';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+part of kandy;
+
 
 class SplashScreen extends StatefulWidget {
   @override
