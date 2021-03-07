@@ -31,6 +31,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:platform_info/platform_info.dart';
 
 
