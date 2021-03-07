@@ -415,18 +415,24 @@ class _VideoAppState extends State<VideoApp> {
 
   Widget hitpauseButton() {
     return Center(
-        child: _controller!.value.isPlaying
-            ? null
-            : Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                color: Colors.black38,
-                child: Icon(
-                  Icons.pause,
-                  size: 100,
-                  color: Colors.white,
-                )));
+      child: _controller!.value.isPlaying
+          ? null
+          : InkWell(
+              onTap: () {
+                _handleplaypauseTapAction();
+              },
+              child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  color: Colors.black38,
+                  child: Icon(
+                    Icons.pause,
+                    size: 100,
+                    color: Colors.white,
+                  )),
+            ),
+    );
   }
 
   Widget videoView() {
@@ -441,22 +447,6 @@ class _VideoAppState extends State<VideoApp> {
                 ),
               )
             : Container());
-    //  SingleChildScrollView(
-    //   physics: NeverScrollableScrollPhysics(),
-    //   child: Column(
-    //     children: [
-    //       if (_controller!.value.initialized) ...[
-    //         AspectRatio(
-    //           aspectRatio: _controller!.value.aspectRatio,
-    //           child: VideoPlayer(_controller),
-    //         ),
-    //       ] else
-    //         (Container(
-    //           color: Colors.green,
-    //         ))
-    //     ],
-    //   ),
-    // );
   }
 
   Widget control() {

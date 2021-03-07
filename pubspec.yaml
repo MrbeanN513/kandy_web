@@ -33,8 +33,9 @@ dependencies:
   video_player_web:
   wakelock:
   flutter_spinkit: 
-  cross_connectivity: 
- 
+  cross_connectivity:
+  url_launcher: ^6.0.2 
+  platform_info:
 
   
   

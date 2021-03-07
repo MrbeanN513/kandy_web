@@ -3,6 +3,7 @@ library kandy;
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:cross_connectivity/cross_connectivity.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_core/firebase_core.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +30,9 @@ import 'dart:core';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:platform_info/platform_info.dart';
+
 
 //* my_import
 part 'package:kandy/login_page/layout/landscape/landscape.dart';
@@ -41,6 +45,7 @@ part 'package:kandy/util/appbar.dart';
 part 'package:kandy/util/button/button_dpad.dart';
 part 'package:kandy/util/player/internal_videoplayer.dart';
 part 'package:kandy/util/button/shortcut.dart';
+part 'package:kandy/util/search.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,7 +77,7 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider(
           create: (context) =>
-              context.read<AuthenticationService>().authStateChanges, 
+              context.read<AuthenticationService>().authStateChanges,
         )
       ],
       child: Shortcuts(

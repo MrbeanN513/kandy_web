@@ -28,6 +28,9 @@ class _FilmListState extends State<FilmList> {
   ScrollController? _scrollcontroller;
   ScrollController? _scrollcontroller2;
   bool _barhide = false;
+  String catargory = 'BANGLA';
+  String imagEurl = 'a';
+  String videOurl = 'aa';
 
   @override
   void initState() {
@@ -40,7 +43,7 @@ class _FilmListState extends State<FilmList> {
 
   @override
   Widget build(BuildContext context) {
-    Query query = FirebaseFirestore.instance.collection('BANGLA');
+    Query query = FirebaseFirestore.instance.collection(catargory);
 
     void handlehide(BuildContext context) {
       setState(() {
@@ -48,6 +51,129 @@ class _FilmListState extends State<FilmList> {
         print(_barhide);
       });
       print("object");
+    }
+
+    void handleTaphide() {
+      setState(() {
+        _barhide = !_barhide;
+        print(_barhide);
+      });
+      print("object");
+    }
+
+    void handlesearchontap() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CloudFirestoreSearch()));
+    }
+
+    void handletv(BuildContext context) {
+      showDialog(
+        barrierColor: Colors.black87,
+        context: context,
+        builder: (context) => PageDialouge(
+          onEnterpage1: (BuildContext context) {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'a';
+              videOurl = 'aa';
+            });
+          },
+          onEnterpage2: (BuildContext context) {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'b';
+              videOurl = 'bb';
+            });
+          },
+          onEnterpage3: (BuildContext context) {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'c';
+              videOurl = 'cc';
+            });
+          },
+          onEnterpage4: (BuildContext context) {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'd';
+              videOurl = 'dd';
+            });
+          },
+          ontappage1: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'a';
+              videOurl = 'aa';
+            });
+          },
+          ontappage2: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'b';
+              videOurl = 'bb';
+            });
+          },
+          ontappage3: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'c';
+              videOurl = 'cc';
+            });
+          },
+          ontappage4: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'd';
+              videOurl = 'dd';
+            });
+          },
+        ),
+      );
+    }
+
+    void handletvontap() {
+      showDialog(
+        barrierColor: Colors.black87,
+        context: context,
+        builder: (context) => PageDialouge(
+          ontappage1: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'a';
+              videOurl = 'aa';
+            });
+          },
+          ontappage2: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'b';
+              videOurl = 'bb';
+            });
+          },
+          ontappage3: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'c';
+              videOurl = 'cc';
+            });
+          },
+          ontappage4: () {
+            setState(() {
+              Navigator.of(context).pop();
+              imagEurl = 'd';
+              videOurl = 'dd';
+            });
+          },
+        ),
+      );
+    }
+
+    void handleuserontap() {
+      showDialog(
+        barrierColor: Colors.black87,
+        context: context,
+        builder: (context) => CustomDialouge(),
+      );
     }
 
     void handleuser(BuildContext context) {
@@ -58,6 +184,11 @@ class _FilmListState extends State<FilmList> {
       );
     }
 
+    void handlesearch(BuildContext context) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CloudFirestoreSearch()));
+    }
+
     return ConnectivityBuilder(
       builder: (context, isConnected, status) => Stack(
         children: [
@@ -65,7 +196,13 @@ class _FilmListState extends State<FilmList> {
             backgroundColor: Colors.black,
             appBar: aioAppBar(
               handlehide,
+              handlesearch,
+              handletv,
               handleuser,
+              handleTaphide,
+              handlesearchontap,
+              handletvontap,
+              handleuserontap,
             ),
             body: SingleChildScrollView(
               controller: _scrollcontroller2,
@@ -116,8 +253,11 @@ class _FilmListState extends State<FilmList> {
                                   crossAxisSpacing: 5,
                                 ),
                                 itemCount: querySnapshot!.size,
-                                itemBuilder: (context, index) =>
-                                    Movie(querySnapshot.docs[index]),
+                                itemBuilder: (context, index) => Movie(
+                                  querySnapshot.docs[index],
+                                  imagEurl,
+                                  videOurl,
+                                ),
                               ),
                             ),
                           );
@@ -168,6 +308,84 @@ class _FilmListState extends State<FilmList> {
     );
   }
 
+  void sidebarMoviesOnTap() {
+    showDialog(
+      barrierColor: Colors.black87,
+      context: context,
+      builder: (context) => CatagoryDialouge(
+        ontapBangla: () {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'BANGLA';
+          });
+        },
+        ontapBollywood: () {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'BOLLYWOOD';
+          });
+        },
+        ontapEnglish: () {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'ENGLISH';
+          });
+        },
+        ontapHindiDubbed: () {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'HINDI_DUBBED';
+          });
+        },
+        ontapSouth: () {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'SOUTH';
+          });
+        },
+      ),
+    );
+  }
+
+  void handleEnterTapActionMoviessidebar(BuildContext context) {
+    showDialog(
+      barrierColor: Colors.black87,
+      context: context,
+      builder: (context) => CatagoryDialouge(
+        handleEnterTapActionBangla: (BuildContext context) {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'BANGLA';
+          });
+        },
+        handleEnterTapActionBollywood: (BuildContext context) {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'BOLLYWOOD';
+          });
+        },
+        handleEnterTapActionEnglish: (BuildContext context) {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'ENGLISH';
+          });
+        },
+        handleEnterTapActionHindiDubbed: (BuildContext context) {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'HINDI_DUBBED';
+          });
+        },
+        handleEnterTapActionSouth: (BuildContext context) {
+          setState(() {
+            Navigator.of(context).pop();
+            catargory = 'SOUTH';
+          });
+        },
+      ),
+    );
+  }
+
   Widget sidebar() {
     return AnimatedContainer(
       height: MediaQuery.of(context).size.height,
@@ -180,6 +398,7 @@ class _FilmListState extends State<FilmList> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SidebarTv(
+              ontap: () {},
               child: ListTile(
                 trailing: Icon(Icons.arrow_forward_ios),
                 leading: Icon(Icons.home_outlined),
@@ -187,6 +406,10 @@ class _FilmListState extends State<FilmList> {
               ),
             ),
             SidebarTv(
+              ontap: () {
+                sidebarMoviesOnTap();
+              },
+              handleEnterTapAction: handleEnterTapActionMoviessidebar,
               child: ListTile(
                 trailing: Icon(Icons.arrow_forward_ios),
                 leading: Icon(Icons.local_movies_outlined),
@@ -238,16 +461,21 @@ class _FilmListState extends State<FilmList> {
 }
 
 class SidebarTv extends StatelessWidget {
-  const SidebarTv({Key? key, this.child}) : super(key: key);
+  const SidebarTv({Key? key, this.child, this.ontap, this.handleEnterTapAction})
+      : super(key: key);
   final Widget? child;
+  final GestureTapCallback? ontap;
+  final VoidBuildContext? handleEnterTapAction;
   @override
   Widget build(BuildContext context) {
     return FuchsiaSidebarButton(
+      handleEnterTapAction: handleEnterTapAction,
       focusedBackgroundColor: Colors.red,
       nonFocusedBackgroundColor: Color(0xff323232),
       height: 50,
       focussedwidth: 250,
       nonfocussedwidth: 56,
+      ontap: ontap,
       child: OverflowBox(
         alignment: Alignment.centerLeft,
         maxWidth: 250,
@@ -265,9 +493,11 @@ class SidebarTv extends StatelessWidget {
 class Movie extends StatelessWidget {
   /// Contains all snapshot data for a given movie.
   final DocumentSnapshot snapshot;
+  final String imageurl;
+  final String videourl;
 
   /// Initialize a [Move] instance with a given [DocumentSnapshot].
-  Movie(this.snapshot);
+  Movie(this.snapshot, this.imageurl, this.videourl);
 
   /// Returns the [DocumentSnapshot] data as a a [Map].
   Map<String, dynamic> get movie {
@@ -302,7 +532,7 @@ class Movie extends StatelessWidget {
                   color: Color(0xff323232),
                 ),
             height: 250,
-            imageUrl: movie['a']),
+            imageUrl: movie[imageurl]),
       ),
     );
   }
@@ -317,12 +547,60 @@ class Movie extends StatelessWidget {
     }
 
     void _movielink(BuildContext context) {
-      navigatetoplayerdetails(movie["aa"]);
+      navigatetoplayerdetails(movie[videourl]);
     }
+
+    void _launchwindows() {
+      String windowsurl =
+          "https://github.com/MrbeanN513/vlc-protocol/tree/master/windows";
+      launch(windowsurl);
+    }
+
+    void _launchvlcURL() {
+      String windowsurl =
+          "https://github.com/MrbeanN513/vlc-protocol/tree/master/windows";
+      String url = movie[videourl];
+      // String result = url.replaceAll("vlc://", "");
+      platform.when(
+        android: () => launch(url),
+      );
+      platform.when(linux: () => launch(url));
+      platform.when(
+        windows: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color(0xffFF0000),
+          content: TextButton(
+            onPressed: _launchwindows,
+            child: RichText(text: TextSpan(children: [
+             TextSpan(
+              text:
+              'Double click or enter to play....... ',
+              style: TextStyle(color: Colors.white, fontSize: 12),),
+              TextSpan(
+              text:
+              'if you want to run on vlc please visit-',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+            TextSpan(
+              text:
+              ' $windowsurl',
+              style: TextStyle(color: Color(0xff00008b), fontSize: 15),
+            ),
+            ])),
+            // Text(
+            //   'Double click or enter to play.....if you want to run on vlc please visit -$windowsurl',
+            //   style: TextStyle(color: Colors.white, fontSize: 12),
+            // ),
+          ),
+        )),
+      );
+    }
+    // void _launchvlcURL() async =>
+    // await canLaunch("/bin/"+movie[videourl]) ? await launch("/bin/"+movie[videourl]) : throw 'Could not launch "/bin/"+$movie[videourl]';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4, top: 4),
       child: FuchsiaMainButton(
+        ontap: _launchvlcURL,
         autoFocus: true,
         height: double.maxFinite,
         width: double.maxFinite,

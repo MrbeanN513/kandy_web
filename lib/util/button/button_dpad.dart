@@ -1,6 +1,5 @@
 part of kandy;
 
-
 typedef VoidBuildContext = void Function(BuildContext context);
 typedef VoidTrapKeyEvent = void Function(
     BuildContext context, RawKeyEvent event);
@@ -25,6 +24,7 @@ class FuchsiaAppbarButton extends StatefulWidget {
   final double? height;
   final EdgeInsetsGeometry? margin;
   final Matrix4? transform;
+  final GestureTapCallback? ontap;
 
   FuchsiaAppbarButton({
     Key? key,
@@ -48,6 +48,7 @@ class FuchsiaAppbarButton extends StatefulWidget {
     this.height = 100,
     this.margin,
     this.transform,
+    this.ontap,
     this.voidTrapKeyEvent,
   })  : assert(focusedchild != null, nonFocusedchild != null),
         _handleEnterTapAction = handleEnterTapAction,
@@ -150,7 +151,8 @@ class _FocusableEnterTapActionableWidget extends State<FuchsiaAppbarButton> {
       final hasFocus = focusNode.hasFocus;
 
       GestureDetector gestureDetector = GestureDetector(
-          onTap: () {
+        onTap:widget.ontap,
+          onDoubleTap: () {
             if (!hasFocus) {
               _gestureDetectorRequestedFocus = true;
               focusNode.requestFocus();
@@ -209,6 +211,7 @@ class FuchsiaMainButton extends StatefulWidget {
   final double? height;
   final EdgeInsetsGeometry? margin;
   final Matrix4? transform;
+  final GestureTapCallback? ontap;
 
   FuchsiaMainButton({
     Key? key,
@@ -231,6 +234,7 @@ class FuchsiaMainButton extends StatefulWidget {
     this.margin,
     this.transform,
     this.voidTrapKeyEvent,
+    this.ontap,
   })  : assert(focusedchild != null, nonFocusedchild != null),
         _handleEnterTapAction = handleEnterTapAction,
         super(key: key);
@@ -332,7 +336,8 @@ class _FocusableEnterTapActionableMainWidget extends State<FuchsiaMainButton> {
       final hasFocus = focusNode.hasFocus;
 
       GestureDetector gestureDetector = GestureDetector(
-          onTap: () {
+        onTap: widget.ontap,
+          onDoubleTap: () {
             if (!hasFocus) {
               _gestureDetectorRequestedFocus = true;
               focusNode.requestFocus();
@@ -395,6 +400,7 @@ class FuchsiaSidebarButton extends StatefulWidget {
   final Function? onFocus;
   final Duration? duration;
   final Curve? curve;
+  final GestureTapCallback? ontap;
 
   FuchsiaSidebarButton({
     Key? key,
@@ -421,6 +427,7 @@ class FuchsiaSidebarButton extends StatefulWidget {
     this.duration = const Duration(seconds: 1),
     this.curve = Curves.decelerate,
     this.voidTrapKeyEvent,
+    this.ontap,
   })  : assert(
           child != null,
         ),
@@ -529,12 +536,17 @@ class _FocusableEnterTapActionableSidebarWidget
       final hasFocus = focusNode.hasFocus;
 
       GestureDetector gestureDetector = GestureDetector(
-          onTap: () {
+          onTap:  widget.ontap,
+           
+          onDoubleTap: 
+          () {
             if (!hasFocus) {
               _gestureDetectorRequestedFocus = true;
               focusNode.requestFocus();
+               widget.ontap!;
             } else {
               _handleEnterTapAction(context);
+              widget.ontap!;
             }
           },
           child: _getEnabledChild(hasFocus));
