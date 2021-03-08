@@ -21,11 +21,32 @@ class _VideoAppState extends State<VideoApp> {
   Timer? timer;
   Timer? timer2;
   bool isControlHidden = false;
+  String? timeString;
+  String? timeeString;
+
+  void _getTime() {
+    final String formattedDateTime = DateFormat.jm().format(now).toString();
+    setState(() {
+      timeString = formattedDateTime;
+    });
+  }
+
+  void getTimecu() {
+    final String forDateTime = (DateFormat.jm()
+        .format(now.add((videoLength! - videoPosition!)))
+        .toString());
+    setState(() {
+      timeeString = forDateTime;
+    });
+  }
 
   @override
   void initState() {
     String? videoUrl = widget.url;
     super.initState();
+    print(timeString);
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+    Timer.periodic(Duration(seconds: 1), (Timer t) => getTimecu());
     _controller = VideoPlayerController.network(videoUrl!)
       ..addListener(() => setState(() {
             videoPosition = _controller!.value.position;
@@ -458,13 +479,10 @@ class _VideoAppState extends State<VideoApp> {
             RichText(
               text: TextSpan(children: [
                 TextSpan(
-                    text: DateFormat.jm().format(now),
+                    text: timeString,
                     style: TextStyle(color: Colors.white, fontSize: 30)),
                 TextSpan(
-                    text: "\n  end by:" +
-                        (DateFormat.jm()
-                            .format(now.add((videoLength! - videoPosition!)))
-                            .toString()),
+                    text: "\n  end by:" + timeeString!,
                     style: TextStyle(color: Colors.white, fontSize: 15)),
               ]),
             ),
