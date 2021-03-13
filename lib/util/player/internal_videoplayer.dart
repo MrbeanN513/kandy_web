@@ -12,7 +12,7 @@ class _VideoAppState extends State<VideoApp> {
   Duration? videoLength;
   Duration? videoPosition;
   double volume = 0.5;
-  var now = new DateTime.now();
+  final now = DateTime.now();
   bool isPressedForward = false;
   bool isPressedBackward = false;
   double playbackSpeed = 1.0;
@@ -21,32 +21,36 @@ class _VideoAppState extends State<VideoApp> {
   Timer? timer;
   Timer? timer2;
   bool isControlHidden = false;
-  String? timeString;
-  String? timeeString;
+  String? _timeString;
+  String? _timeeString;
+  String? formattedDateTime;
+  String? forDateTime;
 
   void _getTime() {
-    final String formattedDateTime = DateFormat.jm().format(now).toString();
+    formattedDateTime = DateFormat().add_jm().format(DateTime.now()).toString();
     setState(() {
-      timeString = formattedDateTime;
+      _timeString = formattedDateTime;
     });
   }
 
-  void getTimecu() {
-    final String forDateTime = (DateFormat.jm()
-        .format(now.add((videoLength! - videoPosition!)))
-        .toString());
+  void _getTimecu() {
+    forDateTime = DateFormat()
+        .add_jm()
+        .format(DateTime.now().add(videoLength! - videoPosition!))
+        .toString();
     setState(() {
-      timeeString = forDateTime;
+      _timeeString = forDateTime;
     });
   }
 
   @override
   void initState() {
     String? videoUrl = widget.url;
+
+    print(_timeString);
+    Timer.periodic(Duration(seconds: 1), (Timer t) => {_getTime()});
+    Timer.periodic(Duration(seconds: 1), (Timer t) => {_getTimecu()});
     super.initState();
-    print(timeString);
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
-    Timer.periodic(Duration(seconds: 1), (Timer t) => getTimecu());
     _controller = VideoPlayerController.network(videoUrl!)
       ..addListener(() => setState(() {
             videoPosition = _controller!.value.position;
@@ -146,7 +150,7 @@ class _VideoAppState extends State<VideoApp> {
   }
 
   void _hideTimer() {
-    timer = new Timer(const Duration(seconds: 5), () {
+    timer = Timer(const Duration(seconds: 5), () {
       setState(() {
         isPressedForward = false;
         isControlHidden = true;
@@ -155,7 +159,7 @@ class _VideoAppState extends State<VideoApp> {
   }
 
   void hideTimerForwardBackward() {
-    timer2 = new Timer(const Duration(seconds: 1), () {
+    timer2 = Timer(const Duration(seconds: 1), () {
       setState(() {
         isPressedForward = false;
         isPressedBackward = false;
@@ -243,7 +247,7 @@ class _VideoAppState extends State<VideoApp> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Please Connect to Internet",
+                            'Please Connect to Internet',
                             style: TextStyle(color: Colors.white, fontSize: 15),
                           ),
                         ),
@@ -342,7 +346,7 @@ class _VideoAppState extends State<VideoApp> {
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
                       formatDuration(videoPosition!) +
-                          "/" +
+                          '/' +
                           formatDuration(videoLength!),
                       style: TextStyle(fontSize: 25, color: Colors.white)),
                 ))
@@ -479,10 +483,10 @@ class _VideoAppState extends State<VideoApp> {
             RichText(
               text: TextSpan(children: [
                 TextSpan(
-                    text: timeString,
+                    text: _timeString,
                     style: TextStyle(color: Colors.white, fontSize: 30)),
                 TextSpan(
-                    text: "\n  end by:" + timeeString!,
+                    text: '\n  end by:' + _timeeString!,
                     style: TextStyle(color: Colors.white, fontSize: 15)),
               ]),
             ),
